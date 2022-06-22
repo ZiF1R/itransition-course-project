@@ -1,11 +1,12 @@
+/* eslint-disable camelcase */
 "use strict";
 
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../db");
 const OptionalFieldType = require("./OptionalFieldType");
-const Collection = require("../Collection");
+const Collection = require("./Collection");
 
-const optionalField = sequelize.define("OptionalField", {
+const optionalField = sequelize.define("collection_optional_field", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -15,13 +16,9 @@ const optionalField = sequelize.define("OptionalField", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  value: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  }
 });
 
-optionalField.collectionID = optionalField.hasOne(OptionalFieldType);
-optionalField.typeID = optionalField.hasOne(Collection);
+optionalField.collection_id = optionalField.hasOne(Collection);
+optionalField.type_id = optionalField.hasOne(OptionalFieldType);
 
 module.exports = optionalField;

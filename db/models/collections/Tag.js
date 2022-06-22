@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 "use strict";
 
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../db");
-const Item = require("./Item");
+const Item = require("./item/Item");
 
-const tag = sequelize.define("Tag", {
+const tag = sequelize.define("tag", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -16,6 +17,6 @@ const tag = sequelize.define("Tag", {
   },
 });
 
-tag.collectionID = tag.hasMany(Item);
+tag.item_id = tag.hasMany(Item);
 
 module.exports = tag;

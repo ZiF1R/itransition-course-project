@@ -3,7 +3,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../db");
 
-module.exports = sequelize.define("CollectionTopic", {
+module.exports = sequelize.define("collection_topic", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

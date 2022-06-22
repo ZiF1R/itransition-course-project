@@ -1,19 +1,20 @@
+/* eslint-disable camelcase */
 "use strict";
 
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
 
-module.exports = sequelize.define("User", {
+module.exports = sequelize.define("users", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  firstName: {
+  first_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  lastName: {
+  last_name: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -25,14 +26,24 @@ module.exports = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  isBlocked: {
+  is_blocked: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   },
-  isAdmin: {
+  is_admin: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   },
+  created_date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  last_visit: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+}, {
+  timestamps: false
 });

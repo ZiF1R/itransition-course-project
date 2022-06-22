@@ -3,13 +3,13 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../db");
 
-module.exports = sequelize.define("OptionalFieldType", {
+module.exports = sequelize.define("optional_field_type", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
-  type: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   }

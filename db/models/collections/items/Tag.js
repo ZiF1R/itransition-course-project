@@ -4,7 +4,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = function(sequelize) {
-  return sequelize.define("collections", {
+  return sequelize.define("tags", {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -13,14 +13,6 @@ module.exports = function(sequelize) {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    image_link: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
   }, {
     timestamps: false,

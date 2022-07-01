@@ -4,24 +4,16 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = function(sequelize) {
-  return sequelize.define("collections", {
+  return sequelize.define("item_optional_fields", {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
+    value: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    image_link: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+    }
   }, {
     timestamps: false,
     freezeTableName: true

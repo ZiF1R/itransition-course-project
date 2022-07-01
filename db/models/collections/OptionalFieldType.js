@@ -1,16 +1,20 @@
 "use strict";
 
 const { DataTypes } = require("sequelize");
-const sequelize = require("../../db");
 
-module.exports = sequelize.define("optional_field_type", {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-});
+module.exports = function(sequelize) {
+  return sequelize.define("optional_field_types", {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
+  }, {
+    timestamps: false,
+    freezeTableName: true
+  });
+};

@@ -4,23 +4,11 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = function(sequelize) {
-  return sequelize.define("collections", {
+  return sequelize.define("likes", {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    image_link: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
   }, {
     timestamps: false,

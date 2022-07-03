@@ -79,6 +79,7 @@ function Registration() {
           label="Email"
           variant="outlined"
           className="auth-form__input"
+          autoComplete="off"
           required
           disabled={disableSubmit}
           {...register("email", { required: true })}

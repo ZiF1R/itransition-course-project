@@ -15,7 +15,8 @@ class UserController {
       res.status(400);
       res.end("User not found!");
     } else {
-      await this.updateUserLastVisit(user);
+      user.last_visit = new Date();
+      await user.save();
       res.json({ user });
     }
   }
@@ -26,19 +27,6 @@ class UserController {
     const password = url.searchParams.get("password");
 
     return { email, password };
-  }
-
-  async updateUserLastVisit(user) {
-    await Users.update(
-      {
-        last_visit: new Date()
-      },
-      {
-        where: {
-          id: user.id
-        }
-      }
-    );
   }
 
   async createUser(req, res) {

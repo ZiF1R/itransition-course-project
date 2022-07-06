@@ -8,11 +8,6 @@
   z-index: 1;
 }
 
-:root {
-  --total-width: 1200px;
-  --items-width: 600px;
-}
-
 .main-container {
   display: flex;
   flex-direction: row;

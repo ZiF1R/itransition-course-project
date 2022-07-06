@@ -11,16 +11,20 @@ module.exports = function(sequelize) {
       primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     image_link: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
+    },
+    created_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   }, {
     timestamps: false,

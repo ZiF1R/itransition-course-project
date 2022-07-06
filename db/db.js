@@ -71,7 +71,7 @@ Likes.belongsTo(Items, { foreignKey: "item_id" });
 Likes.belongsTo(Users, { foreignKey: "user_id" });
 
 (async () => {
-  // await sequelize.sync({ force: true });
+  // await sequelize.sync({ alter: true });
   await sequelize.authenticate();
   console.log("Connected!");
 })();

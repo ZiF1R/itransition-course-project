@@ -11,7 +11,15 @@ module.exports = function(sequelize) {
       primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    created_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    last_edit: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
   }, {

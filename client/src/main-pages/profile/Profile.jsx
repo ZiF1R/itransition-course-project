@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, AlertTitle, Avatar, Chip, Divider, Button } from "@mui/material";
+import { Alert, AlertTitle, Avatar, Chip, Button } from "@mui/material";
 import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,21 +13,23 @@ function Profile({ currentUser, topics, fieldTypes }) {
   const [openModal, setOpenModal] = useState(false);
   const [editCollection, setEditCollection] = useState(null);
 
+  const columns = [
+    "#",
+    "Name",
+    "Topic",
+    "Items count",
+    "Created",
+    "Link",
+    "Edit",
+    "Delete"
+  ];
+
   useEffect(() => {
     if (!currentUser) return;
 
     collectionsService
       .getUserCollections(currentUser.id)
-      .then(res => {
-        const collections = res.data.collections.map((collection) => {
-          collection.topic_name = topics.find(
-            topic => topic.id === collection.topic_id
-          ).name;
-
-          return collection;
-        });
-        setCollections(collections);
-      })
+      .then(res => setCollections(res.data.collections))
       .catch(err => console.log(err));
   }, [currentUser]);
 
@@ -42,7 +44,7 @@ function Profile({ currentUser, topics, fieldTypes }) {
     );
   }
 
-  const handleClickOpen = () => {
+  const handleClickOpenModal = () => {
     setOpenModal(true);
   };
 
@@ -61,8 +63,10 @@ function Profile({ currentUser, topics, fieldTypes }) {
       }));
     } else {
       collection.user_id = currentUser.id;
-      await collectionsService.createCollection(collection);
-      setCollections([...collections, collection]);
+      const response = await collectionsService.createCollection(collection);
+      const newCollection = response.data.collection;
+
+      setCollections([...collections, newCollection]);
     }
     handleClose();
   }
@@ -72,7 +76,6 @@ function Profile({ currentUser, topics, fieldTypes }) {
     setCollections(filteredCollections);
     collectionsService
       .removeCollection(id)
-      .then(res => console.log(res))
       .catch(err => console.log(err));
   }
 
@@ -84,7 +87,7 @@ function Profile({ currentUser, topics, fieldTypes }) {
   }
 
   const fullName = `${currentUser.last_name} ${currentUser.first_name}`;
-  const created = new Date(currentUser.created_date).toLocaleDateString();
+  const created = new Date(currentUser.created_date).toLocaleString();
 
   const totalLikes = 4;
 
@@ -111,22 +114,23 @@ function Profile({ currentUser, topics, fieldTypes }) {
       <div className="collections__container">
         <header>
           <h1>Collections</h1>
-          <Button onClick={handleClickOpen} variant="contained" endIcon={<AddIcon />}>
+          <Button onClick={handleClickOpenModal} variant="contained" endIcon={<AddIcon />}>
             Create
           </Button>
         </header>
-        <Divider />
         { collections.length ? (
           <CollectionsTable
+            columns={columns}
+            collections={collections}
             onEdit={handleEditCollection}
             onRemove={handleRemoveCollection}
-            collections={collections}
           />
         ) : (
           <p>There are no items.</p>
         )}
         { openModal && (
           <ProfileModal
+            currentUser={currentUser}
             fieldTypes={fieldTypes}
             topics={topics}
             openModal={openModal}

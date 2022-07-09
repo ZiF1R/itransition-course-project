@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import "../main.css";
 
-function Nav({ currentUser }) {
+function Nav({ currentUser, setCurrentUser }) {
   const navigate = useNavigate();
 
   return (
@@ -31,7 +31,7 @@ function Nav({ currentUser }) {
           <SearchIcon />
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        { currentUser ? <ProfileMenu currentUser={currentUser} /> : (
+        { currentUser ? <ProfileMenu currentUser={currentUser} setCurrentUser={setCurrentUser} /> : (
           <IconButton sx={{ p: '10px' }} aria-label="profile" onClick={() => navigate("/login")}>
             <LoginIcon />
           </IconButton>

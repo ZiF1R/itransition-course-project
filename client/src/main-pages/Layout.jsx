@@ -3,10 +3,10 @@ import { Outlet } from "react-router-dom";
 import Nav from "./components/Nav";
 import "./main.css";
 
-function Layout({ currentUser }) {
+function Layout({ currentUser, setCurrentUser }) {
   return (
     <>
-      <Nav currentUser={currentUser} />
+      <Nav currentUser={currentUser} setCurrentUser={setCurrentUser} />
 
       <main className="main-container">
         <Outlet />

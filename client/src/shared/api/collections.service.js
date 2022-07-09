@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { baseCollectionsUrl as baseUrl } from "../constants/routes";
+import { baseCollectionsUrl as baseUrl, topFiveBiggestCollectionsUrl } from "../constants/routes";
 
 axios.defaults.headers.common = {
   "Content-Type": "application/json",
@@ -30,6 +30,11 @@ const getUserCollections = async (user_id) => {
   return await request;
 }
 
+const getTopBiggestCollections = async () => {
+  const request = axios.get(topFiveBiggestCollectionsUrl);
+  return await request;
+}
+
 const removeCollection = async (collection_id) => {
   const request = axios.delete(baseUrl + `/${collection_id}`);
   return await request;
@@ -47,5 +52,6 @@ export default {
   getAllCollections,
   getUserCollections,
   removeCollection,
-  getCollectionOptionalFields
+  getCollectionOptionalFields,
+  getTopBiggestCollections
 };

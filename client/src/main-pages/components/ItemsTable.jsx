@@ -7,17 +7,24 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../profile/profile.css";
 
-function CollectionsTable({ columns, collections, onRemove, onEdit, readOnly }) {
+function ItemsTable({ items }) {
   const navigate = useNavigate();
 
-  const handleCollectionLink = (collection) => {
-    navigate(`/collections/${collection.id}`, { state: { collection } });
+  const columns = ["#", "Name", "Collection name"];
+
+  if (items.length) {
+    for (const field of items[0].optionalFields) {
+      columns.push(field.name);
+    }
+  }
+  columns.push("Last edit", "Created", "Link");
+
+  const handleItemLink = (item) => {
+    navigate(`/items/${item.id}`, { state: { item } });
   }
 
   const getDate = (date) => new Date(date).toLocaleString();
@@ -33,7 +40,7 @@ function CollectionsTable({ columns, collections, onRemove, onEdit, readOnly }) 
           </TableRow>
         </TableHead>
         <TableBody>
-          {collections.map((collection, index) => (
+          {items.map((item, index) => (
             <TableRow
               key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -41,33 +48,25 @@ function CollectionsTable({ columns, collections, onRemove, onEdit, readOnly }) 
               <TableCell component="th" scope="row">
                 {index + 1}
               </TableCell>
-              <TableCell align="left">{collection.name}</TableCell>
-              <TableCell align="left">{collection.topic_name}</TableCell>
+              <TableCell align="left">{item.name}</TableCell>
+              <TableCell align="left">{item.collection_name}</TableCell>
 
-              { readOnly && <TableCell align="left">{collection.author}</TableCell> }
+              {item.optionalFields.map((field, i) => (
+                field.type_name === "Checkbox" ? (
+                  <TableCell key={i} align="left">{field.value === "true" ? "✔" : "✖"}</TableCell>
+                ) : (
+                  <TableCell key={i} align="left">{field.value}</TableCell>
+                )
+              ))}
 
-              <TableCell align="left">{collection.items_count}</TableCell>
-              <TableCell align="left">{getDate(collection.created_date)}</TableCell>
+              <TableCell align="left">{getDate(item.last_edit)}</TableCell>
+              <TableCell align="left">{getDate(item.created_date)}</TableCell>
 
               <TableCell align="left">
-                <IconButton onClick={() => handleCollectionLink(collection)}>
+                <IconButton onClick={() => handleItemLink(item)}>
                   <OpenInNewIcon />
                 </IconButton>
               </TableCell>
-              { !readOnly && (
-                <>
-                  <TableCell align="left">
-                    <IconButton onClick={() => onEdit(collection.id)}>
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell align="left">
-                    <IconButton onClick={() => onRemove(collection.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                </>
-              ) }
             </TableRow>
           ))}
         </TableBody>
@@ -76,4 +75,4 @@ function CollectionsTable({ columns, collections, onRemove, onEdit, readOnly }) 
   )
 }
 
-export default CollectionsTable;
+export default ItemsTable;

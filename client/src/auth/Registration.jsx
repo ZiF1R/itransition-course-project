@@ -10,13 +10,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Divider from '@mui/material/Divider';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { useForm } from "react-hook-form";
 import authService from "../shared/api/auth.service";
 import { Link, useNavigate } from 'react-router-dom';
 import "./auth.css";
-import vkLogo from "../assets/vk.svg";
 
 function Registration() {
   const [showPassword, setShowPassword] = useState(false);
@@ -132,13 +130,6 @@ function Registration() {
         <Link to="/login">Login</Link>
 
         {errorMessage && <div className="error-message">{errorMessage}</div>}
-
-        <Divider className="auth-divider">Or create account with</Divider>
-
-        <Button variant="outlined">
-          Sign up with
-          <img src={vkLogo} className="social-network-logo" alt="vk" />
-        </Button>
       </Paper>
 
       <Button

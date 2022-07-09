@@ -15,10 +15,13 @@ import AddIcon from '@mui/icons-material/Add';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import collectionsService from "../../shared/api/collections.service";
+import imageService from "../../shared/api/image.service";
+import DoneIcon from '@mui/icons-material/Done';
 import "./profile.css";
 
 function ProfileModal(props) {
   const {
+    currentUser,
     openModal,
     closeModal,
     topics,
@@ -33,7 +36,10 @@ function ProfileModal(props) {
   const [description, setDescription] = useState(editCollection?.description || "");
   const [topic, setTopic] = useState(topicName || topics[0].name);
   const [optionalFields, setOptionalFields] = useState([]);
+  const [image, setImage] = useState();
+  const [imageType, setImageType] = useState("image/jpeg");
 
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [disabledForm, setDisabledForm] = useState(false);
   const submitButton = useRef(null);
 
@@ -74,11 +80,19 @@ function ProfileModal(props) {
     setOptionalFields(fields);
   }
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     setDisabledForm(true);
 
-    // TODO: move submitting of form to parent component
+    // const data = new FormData();
+    // data.append("photo", image);
+
+    // const response = await imageService
+    //   .uploadImage(data, `image${currentUser.id}${Date.now()}`, imageType)
+    //   .catch(err => console.log(err));
+    // const image_link = response.data.image_link;
+    // console.log(image_link);
+    // return;
 
     const selectedTopic = topics.find(t => t.name === topic);
     const collection = Object.assign(editCollection || {}, {
@@ -86,6 +100,7 @@ function ProfileModal(props) {
       description,
       topic_id: selectedTopic.id,
       topic_name: selectedTopic.name,
+      // image_link,
       optionalFields
     });
 
@@ -106,20 +121,45 @@ function ProfileModal(props) {
     }
   }
 
+  const handleImageLoad = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    // reader.readAsBinaryString(file);
+    reader.readAsDataURL(file);
+    // reader.readAsArrayBuffer(file);
+    setImageType(file.type);
+    setDisabledForm(true);
+
+    reader.onload = function() {
+      // let base64_data = window.btoa(reader.result);
+      // setImage(base64_data);
+      setImage(reader.result);
+      setDisabledForm(false);
+      setImageLoaded(true);
+    }
+  }
+
   return (
     <Dialog open={openModal} onClose={(event) => closeModal(event)}>
       {editCollection ? (
-        <DialogTitle>New collection</DialogTitle>
-      ) : (
         <DialogTitle>Edit collection</DialogTitle>
+      ) : (
+        <DialogTitle>New collection</DialogTitle>
       )}
       <DialogContent className="collection-modal">
         <form onSubmit={onSubmit}>
           <div className="collection-info">
             <label htmlFor="contained-button-file">
-              <Input accept="image/*" id="contained-button-file" type="file" />
-              <Button disabled={disabledForm} variant="outlined" component="div" startIcon={<AddIcon />}>
-                Upload image
+              <Input onChange={handleImageLoad} accept="image/*" id="contained-button-file" type="file" />
+              <Button
+                color={imageLoaded ? "success" : "primary"}
+                disabled={disabledForm}
+                variant="outlined"
+                component="div"
+                startIcon={imageLoaded ? <DoneIcon color="success" /> : <AddIcon />}
+              >
+                {imageLoaded ? "Load completed" : "Load image"}
               </Button>
               <FormHelperText>Image is optional</FormHelperText>
             </label>
@@ -131,7 +171,8 @@ function ProfileModal(props) {
                 label="Collection name"
                 type="text"
                 fullWidth
-                variant="standard"
+                variant="outlined"
+                size="small"
                 required
                 disabled={disabledForm}
                 value={name}
@@ -188,11 +229,15 @@ function ProfileModal(props) {
             </div>
           </div>
 
-          <textarea
+          <TextField
+            label="Description"
+            multiline
             disabled={disabledForm}
             required
+            fullWidth
             value={description}
-            onInput={event => setDescription(event.target.value)}
+            onInput={(event) => setDescription(event.target.value)}
+            rows={4}
           />
 
           <Button

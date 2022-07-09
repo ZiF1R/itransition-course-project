@@ -5,17 +5,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import Collapse from '@mui/material/Collapse';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
 import {
   amber, blue, blueGrey, brown, common, cyan,
   deepOrange, deepPurple, green, grey, indigo, lightBlue,
@@ -30,10 +23,9 @@ const randomColors = [ amber, blue, blueGrey, brown, common,
 const randomIndex = ~~(Math.random() * ((randomColors.length - 1) - 0) + 0);
 const randomColor = randomColors[randomIndex];
 
-function ProfileMenu({ currentUser }) {
+function ProfileMenu({ currentUser, setCurrentUser }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openOptions, setOpenOptions] = useState(false);
   const open = Boolean(anchorEl);
 
   const userFullName = `${currentUser.last_name} ${currentUser.first_name}`;
@@ -47,6 +39,7 @@ function ProfileMenu({ currentUser }) {
   };
 
   const handleLogout = () => {
+    setCurrentUser(null);
     navigate("/login");
   }
 
@@ -86,23 +79,6 @@ function ProfileMenu({ currentUser }) {
           </ListItemIcon>
           Add another account
         </MenuItem>
-        <ListItemButton onClick={() => setOpenOptions(!openOptions)}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Options" />
-          {openOptions ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-        <Collapse in={openOptions} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItemButton sx={{ pl: 4 }}>
-              <ListItemIcon>
-                <Settings fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Theme" />
-            </ListItemButton>
-          </List>
-        </Collapse>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

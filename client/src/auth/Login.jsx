@@ -10,13 +10,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Divider from '@mui/material/Divider';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from 'react-router-dom';
-import "./auth.css";
-import vkLogo from "../assets/vk.svg";
 import authService from "../shared/api/auth.service";
+import "./auth.css";
 
 function Login({ setCurrentUser }) {
   const { register, handleSubmit } = useForm();
@@ -96,13 +94,6 @@ function Login({ setCurrentUser }) {
         <Link to="/registration">Create new</Link>
 
         {errorMessage && <div className="error-message">{errorMessage}</div>}
-
-        <Divider className="auth-divider">Or login with</Divider>
-
-        <Button variant="outlined">
-          Sign in with
-          <img src={vkLogo} className="social-network-logo" alt="vk" />
-        </Button>
       </Paper>
 
       <Button

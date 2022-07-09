@@ -10,6 +10,7 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import topicsService from "./shared/api/topics.service";
 import collectionsService from "./shared/api/collections.service";
 import './App.css';
+import Collection from "./main-pages/collection/Collection";
 
 function App() {
   // const [currentTheme, setCurrentTheme] = useState();
@@ -35,8 +36,9 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login setCurrentUser={setCurrentUser} />} />
         <Route path="/registration" element={<Registration />} />
-        <Route path="/" element={<Layout currentUser={currentUser} />}>
+        <Route path="/" element={<Layout currentUser={currentUser} setCurrentUser={setCurrentUser} />}>
           <Route index element={<MainPage currentUser={currentUser} />} />
+          <Route path="/collections/:id" element={<Collection currentUser={currentUser} />} />
           <Route path="profile" element={
             <Profile
               fieldTypes={fieldTypes}

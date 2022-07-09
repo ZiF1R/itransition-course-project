@@ -9,8 +9,9 @@ const {
   ItemOptionalFields,
   ItemTags,
   Likes,
-  Comments
+  Comments,
 } = require("../db/db");
+const sequelize = require("sequelize");
 
 class CollectionsController {
   async getOptionalFieldTypes(req, res) {
@@ -27,13 +28,46 @@ class CollectionsController {
       optionalFields
     } = req.body;
 
-    const collection = await Collections.create({
+    const newCollection = await Collections.create({
       name,
       description,
       image_link: null,
       created_date: new Date(),
       user_id,
       topic_id,
+    });
+
+    const collection = await Collections.findOne({
+      where: { id: newCollection.id },
+      attributes: {
+        include: [
+          [
+            sequelize.literal(`(
+                SELECT collection_topics.name
+                FROM collection_topics
+                WHERE collection_topics.id = collections.topic_id
+            )`),
+            "topic_name"
+          ],
+          [
+            sequelize.literal(`(
+                SELECT COUNT(*)
+                FROM items
+                WHERE items.collection_id = collections.id
+            )`),
+            "items_count"
+          ],
+          [
+            sequelize.literal(`(
+                SELECT
+                  users.last_name || ' ' || users.first_name
+                FROM users
+                WHERE users.id = collections.user_id
+            )`),
+            "author"
+          ],
+        ]
+      }
     });
 
     for (const { name, type_id } of optionalFields) {
@@ -50,17 +84,92 @@ class CollectionsController {
   async getCollections(req, res) {
     const url = new URL(req.url, "https://baseurl.com/");
     const user_id = +url.searchParams.get("user_id");
+    const limit = +url.searchParams.get("limit");
+    const order_by = url.searchParams.get("order_by") || "id";
+    const order = url.searchParams.get("order") || "ASC";
 
     let collections = [];
     if (user_id) {
-      collections = await await Collections.findAll({
-        where: { user_id }
+      collections = await Collections.findAll({
+        where: { user_id },
+        attributes: {
+          include: [
+            [
+              sequelize.literal(`(
+                  SELECT collection_topics.name
+                  FROM collection_topics
+                  WHERE collection_topics.id = collections.topic_id
+              )`),
+              "topic_name"
+            ],
+            [
+              sequelize.literal(`(
+                  SELECT COUNT(*)
+                  FROM items
+                  WHERE items.collection_id = collections.id
+              )`),
+              "items_count"
+            ],
+            [
+              sequelize.literal(`(
+                  SELECT
+                    users.last_name || ' ' || users.first_name
+                  FROM users
+                  WHERE users.id = collections.user_id
+              )`),
+              "author"
+            ],
+          ]
+        },
+        order: [
+          [order_by, order]
+        ],
       });
     } else {
-      collections = await Collections.findAll();
+      collections = await this.getTopBiggestCollections(limit, order);
     }
 
     res.json({ collections });
+  }
+
+  async getTopBiggestCollections(limit, order) {
+    const collections = await Collections.findAll({
+      attributes: {
+        include: [
+          [
+            sequelize.literal(`(
+                SELECT COUNT(*)
+                FROM items
+                WHERE items.collection_id = collections.id
+            )`),
+            "items_count"
+          ],
+          [
+            sequelize.literal(`(
+                SELECT
+                  users.last_name || ' ' || users.first_name
+                FROM users
+                WHERE users.id = collections.user_id
+            )`),
+            "author"
+          ],
+          [
+            sequelize.literal(`(
+                SELECT collection_topics.name
+                FROM collection_topics
+                WHERE collection_topics.id = collections.topic_id
+            )`),
+            "topic_name"
+          ]
+        ]
+      },
+      order: [
+        [sequelize.literal("items_count"), order]
+      ],
+      limit
+    });
+
+    return collections;
   }
 
   async removeCollection(req, res) {
@@ -89,10 +198,9 @@ class CollectionsController {
     }
   }
 
-  async removeItem(item_id, collection_id) {
+  async removeItem(item_id) {
     const relatedTables = [
       ItemOptionalFields,
-      ItemTags,
       Likes,
       Comments
     ];
@@ -103,8 +211,12 @@ class CollectionsController {
       });
     }
 
+    await ItemTags.destroy({
+      where: { itemId: item_id }
+    });
+
     await Items.destroy({
-      where: { collection_id }
+      where: { id: item_id }
     });
   }
 
@@ -155,13 +267,18 @@ class CollectionsController {
     const dbFields = await CollectionOptionalFields.findAll({
       where: { collection_id }
     });
-    const newFields = optionalFields.filter(field => !field.id);
+    const newFields = optionalFields.filter(field => !("id" in field));
 
     for (const field of dbFields) {
       const collectionField = optionalFields.find(f => f.id === field.id);
       if (collectionField) {
-        field.name = collectionField.name;
-        field.type_id = collectionField.type_id;
+        await CollectionOptionalFields.update({
+          name: collectionField.name,
+          type_id: collectionField.type_id
+        },
+        {
+          where: { id: field.id }
+        });
       } else {
         await CollectionOptionalFields.destroy({
           where: { id: field.id }

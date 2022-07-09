@@ -57,8 +57,17 @@ ItemOptionalFields.belongsTo(CollectionOptionalFields, {
   foreignKey: "collection_optional_field_id"
 });
 
-Tags.belongsToMany(Items, { through: ItemTags, foreignKey: "item_id" });
-Items.belongsToMany(Tags, { through: ItemTags, foreignKey: "tag_id" });
+// Items.hasMany(Tags, { through: ItemTags, foreignKey: "item_id" });
+Tags.belongsToMany(Items, {
+  through: ItemTags,
+  uniqueKey: "item_id"
+});
+
+// Tags.hasMany(Items, { through: ItemTags, foreignKey: "item_id" });
+Items.belongsToMany(Tags, {
+  through: ItemTags,
+  uniqueKey: "tag_id"
+});
 
 Items.hasMany(Comments, { foreignKey: "item_id" });
 Users.hasMany(Comments, { foreignKey: "user_id" });
@@ -87,6 +96,7 @@ module.exports = {
   Items,
   ItemOptionalFields,
   Tags,
+  ItemTags,
   Comments,
   Likes,
 };

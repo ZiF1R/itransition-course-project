@@ -6,7 +6,6 @@ const usersRoutes = require("./routes/users.routes");
 const topicsRoutes = require("./routes/topics.routes");
 const collectionsRoutes = require("./routes/collections.routes");
 const itemsRoutes = require("./routes/items.routes");
-const cloudRoutes = require("./routes/cloud.routes");
 const tagsRoutes = require("./routes/tags.routes");
 const bodyParser = require("body-parser");
 
@@ -21,7 +20,6 @@ app.use("/api/users", usersRoutes);
 app.use("/api/topics", topicsRoutes);
 app.use("/api/collections", collectionsRoutes);
 app.use("/api/items", itemsRoutes);
-app.use("/api/cloud", cloudRoutes);
 app.use("/api/tags", tagsRoutes);
 
 if (process.env.NODE_ENV === "production") {

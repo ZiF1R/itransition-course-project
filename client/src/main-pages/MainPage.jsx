@@ -46,7 +46,7 @@ function MainPage({ currentUser }) {
       <section className="biggest-collections">
         <h2>Top 5 biggest collections</h2>
         <div>
-          { biggestCollections.length ? (
+          { biggestCollections?.length ? (
             <CollectionsTable columns={collectionColumns} collections={biggestCollections} readOnly={true} />
           ) : (
             <p>There are no items.</p>

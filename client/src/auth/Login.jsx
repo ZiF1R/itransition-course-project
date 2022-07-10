@@ -13,7 +13,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from 'react-router-dom';
-import authService from "../shared/api/auth.service";
+import usersService from "../shared/api/users.service";
 import "./auth.css";
 
 function Login({ setCurrentUser }) {
@@ -25,7 +25,7 @@ function Login({ setCurrentUser }) {
 
   const onSubmit = data => {
     setDisableSubmit(true);
-    authService
+    usersService
       .login(data.email, data.password)
       .then(response => {
         setCurrentUser(response.data.user)
@@ -101,6 +101,7 @@ function Login({ setCurrentUser }) {
         className="continue-button"
         endIcon={<ArrowRightAltIcon />}
         onClick={() => navigate("/")}
+        disableElevation
       >
         Continue without authentification
       </Button>

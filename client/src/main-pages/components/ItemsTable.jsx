@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import Chip from '@mui/material/Chip';
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../profile/profile.css";
@@ -14,7 +15,7 @@ import "../profile/profile.css";
 function ItemsTable({ items }) {
   const navigate = useNavigate();
 
-  const columns = ["#", "Name", "Collection name"];
+  const columns = ["#", "Name", "Collection name", "Tags"];
 
   if (items.length) {
     for (const field of items[0].optionalFields) {
@@ -24,7 +25,7 @@ function ItemsTable({ items }) {
   columns.push("Last edit", "Created", "Link");
 
   const handleItemLink = (item) => {
-    navigate(`/items/${item.id}`, { state: { item } });
+    navigate(`/collections/${item.collection_id}/items/${item.id}`, { state: { item } });
   }
 
   const getDate = (date) => new Date(date).toLocaleString();
@@ -50,6 +51,10 @@ function ItemsTable({ items }) {
               </TableCell>
               <TableCell align="left">{item.name}</TableCell>
               <TableCell align="left">{item.collection_name}</TableCell>
+
+              <TableCell align="left">{item.tags.map((tag, i) => (
+                <Chip label={tag.name} key={i} variant="outlined" />
+              ))}</TableCell>
 
               {item.optionalFields.map((field, i) => (
                 field.type_name === "Checkbox" ? (

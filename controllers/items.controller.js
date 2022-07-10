@@ -8,7 +8,9 @@ const {
   OptionalFieldTypes,
   Tags,
   ItemTags,
-  Collections
+  Collections,
+  Likes,
+  Comments
 } = require("../db/db");
 const sequelize = require("sequelize");
 
@@ -339,6 +341,97 @@ class ItemsController {
 
     res.status(200);
     res.end();
+  }
+
+  async getItemLikes(req, res) {
+    const item_id = +req.params.id;
+    const likes = await Likes.findAll({
+      where: { item_id }
+    });
+    res.json({ likes });
+  }
+
+  async getItemComments(req, res) {
+    const item_id = +req.params.id;
+    const comments = await Comments.findAll({
+      where: { item_id },
+      attributes: {
+        include: [
+          [
+            sequelize.literal(`(
+              SELECT users.last_name || ' ' || users.first_name
+              FROM users
+              WHERE users.id = comments.user_id
+            )`),
+            "user_name"
+          ],
+        ]
+      },
+    });
+    res.json({ comments });
+  }
+
+  async createItemLike(req, res) {
+    const item_id = +req.params.id;
+    const { user_id } = req.body;
+    const like = await Likes.create({
+      user_id,
+      item_id
+    });
+
+    res.json({ like });
+  }
+
+  async removeItemLike(req, res) {
+    const item_id = +req.params.item_id;
+    const id = +req.params.id;
+
+    await Likes.destroy({
+      where: { id, item_id, }
+    });
+
+    res.status(200).end();
+  }
+
+  async createItemComment(req, res) {
+    const item_id = +req.params.id;
+    const { user_id, body } = req.body;
+
+    const newComment = await Comments.create({
+      item_id,
+      user_id,
+      body,
+      created_date: new Date()
+    });
+
+    const comment = await Comments.findOne({
+      where: { id: newComment.id },
+      attributes: {
+        include: [
+          [
+            sequelize.literal(`(
+              SELECT users.last_name || ' ' || users.first_name
+              FROM users
+              WHERE users.id = comments.user_id
+            )`),
+            "user_name"
+          ],
+        ]
+      },
+    });
+
+    res.json({ comment });
+  }
+
+  async removeItemComment(req, res) {
+    const item_id = +req.params.item_id;
+    const id = +req.params.id;
+
+    await Comments.destroy({
+      where: { id, item_id }
+    });
+
+    res.status(200).end();
   }
 }
 

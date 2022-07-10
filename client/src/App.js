@@ -9,8 +9,9 @@ import Profile from "./main-pages/profile/Profile";
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import topicsService from "./shared/api/topics.service";
 import collectionsService from "./shared/api/collections.service";
-import './App.css';
 import Collection from "./main-pages/collection/Collection";
+import Item from "./main-pages/item/Item";
+import './App.css';
 
 function App() {
   // const [currentTheme, setCurrentTheme] = useState();
@@ -39,6 +40,7 @@ function App() {
         <Route path="/" element={<Layout currentUser={currentUser} setCurrentUser={setCurrentUser} />}>
           <Route index element={<MainPage currentUser={currentUser} />} />
           <Route path="/collections/:id" element={<Collection currentUser={currentUser} />} />
+          <Route path="/collections/:collection_id/items/:id" element={<Item currentUser={currentUser} />} />
           <Route path="profile" element={
             <Profile
               fieldTypes={fieldTypes}

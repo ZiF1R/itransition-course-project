@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 "use strict";
 
-const { Users } = require("../db/db");
+const { Users, Likes } = require("../db/db");
 
 class UsersController {
   async login(req, res) {
@@ -57,6 +57,15 @@ class UsersController {
 
       res.json(user);
     }
+  }
+
+  async getUserLikes(req, res) {
+    const id = +req.params.id;
+    const likes = await Likes.findAll({
+      where: { user_id: id }
+    });
+
+    res.json({ likes });
   }
 }
 

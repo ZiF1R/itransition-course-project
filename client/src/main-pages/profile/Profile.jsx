@@ -3,15 +3,17 @@ import { Alert, AlertTitle, Avatar, Chip, Button } from "@mui/material";
 import CollectionsBookmarkOutlinedIcon from '@mui/icons-material/CollectionsBookmarkOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddIcon from '@mui/icons-material/Add';
-import collectionsService from "../../shared/api/collections.service";
-import "./profile.css";
 import ProfileModal from "./ProfileModal";
 import CollectionsTable from "../components/CollectionsTable";
+import collectionsService from "../../shared/api/collections.service";
+import usersService from "../../shared/api/users.service";
+import "./profile.css";
 
 function Profile({ currentUser, topics, fieldTypes }) {
   const [collections, setCollections] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [editCollection, setEditCollection] = useState(null);
+  const [userLikes, setUserLikes] = useState([]);
 
   const columns = [
     "#",
@@ -30,6 +32,11 @@ function Profile({ currentUser, topics, fieldTypes }) {
     collectionsService
       .getUserCollections(currentUser.id)
       .then(res => setCollections(res.data.collections))
+      .catch(err => console.log(err));
+
+    usersService
+      .getUserLikes(currentUser.id)
+      .then(res => setUserLikes(res.data.likes))
       .catch(err => console.log(err));
   }, [currentUser]);
 
@@ -89,8 +96,6 @@ function Profile({ currentUser, topics, fieldTypes }) {
   const fullName = `${currentUser.last_name} ${currentUser.first_name}`;
   const created = new Date(currentUser.created_date).toLocaleString();
 
-  const totalLikes = 4;
-
   return (
     <div className="profile__container">
       <div className="user__container">
@@ -100,7 +105,7 @@ function Profile({ currentUser, topics, fieldTypes }) {
           <p style={{ textAlign: "center" }}>Account created: {created}</p>
           <div className="user-info__stats">
             <div className="stats__stat">
-              <Chip label={totalLikes} color="info" icon={<FavoriteBorderIcon />} onClick={() => {}} />
+              <Chip label={userLikes.length} color="info" icon={<FavoriteBorderIcon />} onClick={() => {}} />
               <span>Total likes</span>
             </div>
             <div className="stats__stat">

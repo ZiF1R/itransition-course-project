@@ -12,7 +12,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { useForm } from "react-hook-form";
-import authService from "../shared/api/auth.service";
+import usersService from "../shared/api/users.service";
 import { Link, useNavigate } from 'react-router-dom';
 import "./auth.css";
 
@@ -30,7 +30,7 @@ function Registration() {
     if (password !== confirm_password) {
 
     } else {
-      authService
+      usersService
         .createUser(data)
         .then(() => {
           navigate("/login");
@@ -137,6 +137,7 @@ function Registration() {
         className="continue-button"
         endIcon={<ArrowRightAltIcon />}
         onClick={() => navigate("/")}
+        disableElevation
       >
         Continue without registration
       </Button>

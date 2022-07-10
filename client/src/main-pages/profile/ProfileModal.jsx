@@ -84,15 +84,13 @@ function ProfileModal(props) {
     event.preventDefault();
     setDisabledForm(true);
 
-    // const data = new FormData();
-    // data.append("photo", image);
-
-    // const response = await imageService
-    //   .uploadImage(data, `image${currentUser.id}${Date.now()}`, imageType)
-    //   .catch(err => console.log(err));
-    // const image_link = response.data.image_link;
-    // console.log(image_link);
-    // return;
+    const image_link = await imageService
+      .uploadImage(image, `image${currentUser.id}${Date.now()}`, imageType)
+      .catch(err => {
+        console.log(err);
+        setDisabledForm(false);
+        return;
+      });
 
     const selectedTopic = topics.find(t => t.name === topic);
     const collection = Object.assign(editCollection || {}, {
@@ -100,11 +98,12 @@ function ProfileModal(props) {
       description,
       topic_id: selectedTopic.id,
       topic_name: selectedTopic.name,
-      // image_link,
+      image_link,
       optionalFields
     });
 
-    onAction(collection);
+    await onAction(collection);
+    setDisabledForm(false);
   }
 
   const handleSubmitButton = () => {
@@ -125,15 +124,11 @@ function ProfileModal(props) {
     const file = event.target.files[0];
     const reader = new FileReader();
 
-    // reader.readAsBinaryString(file);
-    reader.readAsDataURL(file);
-    // reader.readAsArrayBuffer(file);
+    reader.readAsArrayBuffer(file);
     setImageType(file.type);
     setDisabledForm(true);
 
     reader.onload = function() {
-      // let base64_data = window.btoa(reader.result);
-      // setImage(base64_data);
       setImage(reader.result);
       setDisabledForm(false);
       setImageLoaded(true);

@@ -179,19 +179,23 @@ function Collection({ currentUser }) {
       return;
     }
 
-    navigate("/items/" + selectedItems[0].id);
+    const item = selectedItems[0];
+    item.collection_name = name;
+    navigate("/collections/" + id + "/items/" + item.id, { state: { item } });
     handleCloseOptions();
   }
 
   return (
     <div className="collection__container">
       <header className="collection__header">
-        <img
-          draggable="false"
-          src={image_link}
-          width="200"
-          height="250"
-          alt={topic_name} />
+        { image_link && (
+          <img
+            style={{ alignSelf: "flex-start" }}
+            draggable="false"
+            src={image_link}
+            height="200"
+            alt={topic_name} />
+        )}
         <div className="collection__info">
           <div className="info__header">
             <h1>Info</h1>

@@ -44,6 +44,36 @@ const removeItem = async (id) => {
   return await request;
 }
 
+const getItemLikes = async (id) => {
+  const request = axios.get(baseUrl + `/${id}/likes`);
+  return await request;
+}
+
+const getItemComments = async (id) => {
+  const request = axios.get(baseUrl + `/${id}/comments`);
+  return await request;
+}
+
+const likeItem = async (id, user_id) => {
+  const request = axios.post(baseUrl + `/${id}/likes`, { user_id });
+  return await request;
+}
+
+const removeLike = async (item_id, id) => {
+  const request = axios.delete(baseUrl + `/${item_id}/likes/${id}`);
+  return await request;
+}
+
+const sendComment = async (item_id, data) => {
+  const request = axios.post(baseUrl + `/${item_id}/comments/`, data);
+  return await request;
+}
+
+const removeComment = async (item_id, comment_id) => {
+  const request = axios.delete(baseUrl + `/${item_id}/comments/${comment_id}`);
+  return await request;
+}
+
 export default {
   increaseOffset,
   getLastAddedItems,
@@ -52,5 +82,11 @@ export default {
   generateItemOptionalFields,
   createItem,
   editItem,
-  removeItem
+  removeItem,
+  getItemLikes,
+  likeItem,
+  removeLike,
+  getItemComments,
+  sendComment,
+  removeComment
 };

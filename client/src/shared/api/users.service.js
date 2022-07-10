@@ -15,8 +15,14 @@ const login = async (email, password) => {
   return await request;
 }
 
+const getUserLikes = async (id) => {
+  const request = axios.get(baseUrl + `/${id}/likes`);
+  return await request;
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   login,
   createUser,
+  getUserLikes
 };

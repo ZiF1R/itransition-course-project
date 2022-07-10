@@ -23,6 +23,7 @@
 .collection__info {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .collection__info > h1 {
@@ -40,18 +41,21 @@
 .collection__info .info__field {
   display: flex;
   flex-direction: row;
-  padding: 4px 0;
+  padding: 5px 0;
 }
 
 .collection__info .info__field > p {
   margin: 0;
-  margin-left: 20px;
+  width: calc(100% - 115px);
 }
 
 .collection__info .field__header {
-  min-width: 105px;
+  width: 115px;
+  padding-right: 30px;
   opacity: 0.5;
   user-select: none;
+  line-height: 1;
+  font-size: 0.95em;
 }
 
 .item__modal {

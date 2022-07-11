@@ -69,7 +69,7 @@ function ProfileModal(props) {
     setOptionalFields(optionalFields.map(
       (field, i) => {
         if (i === index)
-          field[fieldPart] = value;
+          field[fieldPart] = value.toString().trim();
         return field;
       }
     ));

@@ -93,7 +93,7 @@ function CollectionModal(props) {
     setFields(fields.map(
       (field, i) => {
         if (i === index) {
-          return Object.assign({}, field, { value: newValue })
+          return Object.assign({}, field, { value: newValue.toString().trim() })
         } else {
           return field;
         }

@@ -15,14 +15,7 @@ import "../profile/profile.css";
 function ItemsTable({ items }) {
   const navigate = useNavigate();
 
-  const columns = ["#", "Name", "Collection name", "Tags"];
-
-  if (items.length) {
-    for (const field of items[0].optionalFields) {
-      columns.push(field.name);
-    }
-  }
-  columns.push("Last edit", "Created", "Link");
+  const columns = ["#", "Name", "Collection name", "Tags", "Last edit", "Created", "Link"];
 
   const handleItemLink = (item) => {
     navigate(`/collections/${item.collection_id}/items/${item.id}`, { state: { item } });
@@ -55,14 +48,6 @@ function ItemsTable({ items }) {
               <TableCell align="left">{item.tags.map((tag, i) => (
                 <Chip label={tag.name} key={i} variant="outlined" />
               ))}</TableCell>
-
-              {item.optionalFields.map((field, i) => (
-                field.type_name === "Checkbox" ? (
-                  <TableCell key={i} align="left">{field.value === "true" ? "✔" : "✖"}</TableCell>
-                ) : (
-                  <TableCell key={i} align="left">{field.value}</TableCell>
-                )
-              ))}
 
               <TableCell align="left">{getDate(item.last_edit)}</TableCell>
               <TableCell align="left">{getDate(item.created_date)}</TableCell>

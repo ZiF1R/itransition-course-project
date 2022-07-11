@@ -25,13 +25,14 @@ class CollectionsController {
       user_id,
       topic_id,
       description,
+      image_link,
       optionalFields
     } = req.body;
 
     const newCollection = await Collections.create({
       name,
       description,
-      image_link: null,
+      image_link,
       created_date: new Date(),
       user_id,
       topic_id,

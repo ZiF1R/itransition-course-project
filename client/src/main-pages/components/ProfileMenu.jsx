@@ -9,6 +9,7 @@ import Logout from '@mui/icons-material/Logout';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import {
   amber, blue, blueGrey, brown, common, cyan,
   deepOrange, deepPurple, green, grey, indigo, lightBlue,
@@ -79,6 +80,14 @@ function ProfileMenu({ currentUser, setCurrentUser }) {
           </ListItemIcon>
           Add another account
         </MenuItem>
+        {currentUser?.is_admin && (
+          <MenuItem onClick={() => navigate("/admin-panel")}>
+            <ListItemIcon>
+              <AdminPanelSettingsIcon fontSize="small" />
+            </ListItemIcon>
+            Admin panel
+          </MenuItem>
+        )}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

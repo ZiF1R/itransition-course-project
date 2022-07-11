@@ -57,7 +57,7 @@ function MainPage({ currentUser }) {
       <section className="last-items">
         <h2>Last added items</h2>
         <div>
-          { lastItems.length ? (
+          { lastItems?.length ? (
             <ItemsTable items={lastItems} />
           ) : (
             <p>There are no items.</p>
@@ -68,7 +68,7 @@ function MainPage({ currentUser }) {
       <section className="tags">
         <h2>Tags</h2>
         <div>
-          { tags.length ? (
+          { tags?.length ? (
             tags.map((tag, index) => (
               <Button size="small" key={index} color="info" variant="outlined" sx={{ mr: 1, mb: 1, borderRadius: 40 }}>
                 {tag.name}

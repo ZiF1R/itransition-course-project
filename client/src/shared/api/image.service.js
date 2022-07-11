@@ -1,13 +1,10 @@
 /* eslint-disable default-case */
-import axios from 'axios';
-import { baseImageUrl as baseUrl } from "../constants/routes";
 import { initializeApp } from "firebase/app";
 import {
   getStorage,
   getDownloadURL,
   ref,
   uploadBytesResumable,
-  uploadString
 } from "firebase/storage";
 
 const firebaseConfig = {

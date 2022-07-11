@@ -45,26 +45,31 @@ function Item({ currentUser }) {
   const popupId = open ? 'simple-popover' : undefined;
 
   useEffect(() => {
-    itemsService
-      .getItemLikes(id)
-      .then(res => {
-        const dbLikes = res.data.likes;
-        setLikes(dbLikes);
+    const getItemStats = () => {
+      itemsService
+        .getItemLikes(id)
+        .then(res => {
+          const dbLikes = res.data.likes;
+          setLikes(dbLikes);
 
-        if (currentUser) {
-          dbLikes.forEach(like => {
-            if (like.user_id === currentUser?.id)
-              setCurrentUserLike(like);
-          });
-        }
-        setLoading(false);
-      })
-      .catch(err => console.log(err));
+          if (currentUser) {
+            dbLikes.forEach(like => {
+              if (like.user_id === currentUser?.id)
+                setCurrentUserLike(like);
+            });
+          }
+          setLoading(false);
+        })
+        .catch(err => console.log(err));
 
-    itemsService
-      .getItemComments(id)
-      .then(res => setComments(res.data.comments))
-      .catch(err => console.log(err));
+      itemsService
+        .getItemComments(id)
+        .then(res => setComments(res.data.comments))
+        .catch(err => console.log(err));
+    }
+
+    getItemStats();
+    setInterval(getItemStats, 5000);
   }, []);
 
   const infoFields = [
@@ -136,7 +141,7 @@ function Item({ currentUser }) {
 
   const handleCommentInput = event => {
     setErrorComment(event.target.value === "");
-    setComment(event.target.value)
+    setComment(event.target.value.toString().trim())
   }
 
   const handleCreateComment = async () => {

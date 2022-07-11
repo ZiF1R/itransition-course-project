@@ -72,8 +72,8 @@ class ItemsController {
     const collection_id = +url.searchParams.get("collection_id");
     const limit = +url.searchParams.get("limit");
     const offset = +url.searchParams.get("offset") || 0;
-    const order_by = +url.searchParams.get("order_by") || "id";
-    const order = +url.searchParams.get("order") || "ASC";
+    const order_by = url.searchParams.get("order_by") || "id";
+    const order = url.searchParams.get("order") || "ASC";
 
     let items = [];
     if (collection_id) {

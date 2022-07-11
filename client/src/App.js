@@ -12,6 +12,7 @@ import collectionsService from "./shared/api/collections.service";
 import Collection from "./main-pages/collection/Collection";
 import Item from "./main-pages/item/Item";
 import './App.css';
+import AdminPanel from "./main-pages/admin/AdminPanel";
 
 function App() {
   // const [currentTheme, setCurrentTheme] = useState();
@@ -31,6 +32,8 @@ function App() {
       .catch(err => console.log(err));
   }, []);
 
+  // TODO: trim form values
+
   return (
     // <ThemeProvider theme={currentTheme}>
     <BrowserRouter>
@@ -41,6 +44,7 @@ function App() {
           <Route index element={<MainPage currentUser={currentUser} />} />
           <Route path="/collections/:id" element={<Collection currentUser={currentUser} />} />
           <Route path="/collections/:collection_id/items/:id" element={<Item currentUser={currentUser} />} />
+          <Route path="/admin-panel" element={<AdminPanel currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
           <Route path="profile" element={
             <Profile
               fieldTypes={fieldTypes}

@@ -36,7 +36,7 @@ function ProfileModal(props) {
   const [description, setDescription] = useState(editCollection?.description || "");
   const [topic, setTopic] = useState(topicName || topics[0].name);
   const [optionalFields, setOptionalFields] = useState([]);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(null);
   const [imageType, setImageType] = useState("image/jpeg");
 
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -84,23 +84,27 @@ function ProfileModal(props) {
     event.preventDefault();
     setDisabledForm(true);
 
-    const image_link = await imageService
-      .uploadImage(image, `image${currentUser.id}${Date.now()}`, imageType)
-      .catch(err => {
-        console.log(err);
-        setDisabledForm(false);
-        return;
-      });
-
     const selectedTopic = topics.find(t => t.name === topic);
     const collection = Object.assign(editCollection || {}, {
       name,
       description,
       topic_id: selectedTopic.id,
       topic_name: selectedTopic.name,
-      image_link,
+      image_link: editCollection?.image_link || null,
       optionalFields
     });
+
+    if (image) {
+      const image_link = await imageService
+        .uploadImage(image, `image${currentUser.id}${Date.now()}`, imageType)
+        .catch(err => {
+          console.log(err);
+          setDisabledForm(false);
+          return;
+        });
+
+      collection.image_link = image_link;
+    }
 
     await onAction(collection);
     setDisabledForm(false);
